@@ -1,7 +1,3 @@
-import datetime
-import random
-
-# Restaurants and Menu
 restaurants = {
     "1": {
         "name": "Domino's Pizza",
@@ -140,106 +136,11 @@ restaurants = {
     }
 }
 
-CGST = 0.025
-SGST = 0.025
-
-delivery_people = [
-    {"name": "Sooraj", "phone": "9566812995"},
-    {"name": "Jegan", "phone": "8667465647"},
-    {"name": "Haricharan", "phone": "8281773691"},
-    {"name": "Vandit", "phone": "7862931393"},
-    {"name": "Abinivesh", "phone": "6385448775"}
-]
 
 
-#Home
-print("\nWelcome to FoodieExpress – Eat Fresh, Eat Fast!\n")
-print(" Available Discounts:")
-print("→ 10% off on orders ₹1000 or above")
-print("→ 5% off on orders ₹500 or above")
-print("→ No discount for orders below ₹500\n")
-user_name = input("Enter your name: ").strip().title()
-
-print(f"\nHi {user_name}! Choose your favourite restaurant:\n")
-for key, rest in restaurants.items():
-    print(f"{key}. {rest['name']}")
-
-rest_choice = input("\nEnter the restaurant number: ")
-
-if rest_choice not in restaurants:
-    print("Invalid choice. Please restart.")
-    exit()
-
-restaurant = restaurants[rest_choice]
-menu = restaurant["menu"]
-
-print(f"\n You selected: {restaurant['name']}")
-print("\n---------- MENU ----------")
-for key, (item, price) in menu.items():
-    print(f"{key}. {item} - ₹{price}")
-
-# Ordering
-order = {}
-while True:
-    choice = input("\nEnter item number (Enter 'ORDER' to finish): ")
-    if choice.lower() == "order":
-        break
-    if choice not in menu:
-        print("Invalid item number.")
-        continue
-    quant = int(input("Enter quantity: "))
-    if quant>0:
-        quantity=quant
-    else:
-        print("Invalid quantity")
-        continue
-    item_name, item_price = menu[choice]
-    order[item_name] = order.get(item_name, 0) + quantity
-
-if not order:
-    print("No items ordered. Exiting.")
-    exit()
 
 
-# Bill Calculation
-subtotal = sum(
-    next(price for num, (name, price) in menu.items() if name == item) * qty
-    for item, qty in order.items()
-)
-cgst = subtotal * CGST
-sgst = subtotal * SGST
-gst_total = cgst + sgst
 
-# Apply discount
-if subtotal >= 1000:
-    discount = subtotal * 0.10
-elif subtotal >= 500:
-    discount = subtotal * 0.05
-else:
-    discount = 0
 
-grand_total = subtotal + gst_total - discount
-delivery_person = random.choice(delivery_people)
 
-# Print Receipt
-print("\n---------------------- BILL RECEIPT ----------------------")
-print(f"Customer Name: {user_name}")
-print(f"Restaurant: {restaurant['name']}")
-print(f"Date: {datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')}\n")
 
-print("Items Ordered:")
-for item, qty in order.items():
-    price = next(price for num, (name, price) in menu.items() if name == item)
-    print(f"  {item} x{qty} = ₹{price * qty}")
-
-print("\nSubtotal: ₹{:.2f}".format(subtotal))
-print("CGST (2.5%): ₹{:.2f}".format(cgst))
-print("SGST (2.5%): ₹{:.2f}".format(sgst))
-print("Discount: ₹{:.2f}".format(discount))
-print("------------------------------------------------------------")
-print("Grand Total: ₹{:.2f}".format(grand_total))
-print("------------------------------------------------------------")
-print(f"‍Delivery Person: {delivery_person['name']}")
-print(f"Contact: {delivery_person['phone']}")
-print("\nThank you for ordering with FoodieExpress,", user_name, "! Enjoy your meal \n")
-print("Your delivery partner will contact you soon!")
